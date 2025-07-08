@@ -2,12 +2,12 @@ namespace DemoMVC.Models
 {
     public class DaiLy
     {
-        public string MaDaiLy { get; set; }
-        public string TenDaiLy { get; set; }
-        public string DiaChi { get; set; }
-        public string NguoiDaiDien { get; set; }
-        public string DienThoai { get; set; }
-        public string MaHTPP { get; set; }
+        public required string MaDaiLy { get; set; }
+        public required string TenDaiLy { get; set; }
+        public required string DiaChi { get; set; }
+        public required string NguoiDaiDien { get; set; }
+        public required string DienThoai { get; set; }
+        public required string MaHTPP { get; set; }
 
         // Navigation property
         public HeThongPhanPhoi? HeThongPhanPhoi { get; set; }
