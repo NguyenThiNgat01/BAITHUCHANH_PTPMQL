@@ -26,6 +26,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\DELL\OneDrive\Desktop\BAITHUCHANH_PTPMQL\DemoMVC
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Models/Person/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = TW9kZWxzXFBlcnNvblxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Models/Person/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = TW9kZWxzXFBlcnNvblxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Models/Person/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = TW9kZWxzXFBlcnNvblxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Models/Person/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = TW9kZWxzXFBlcnNvblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/HelloWorld/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGVsbG9Xb3JsZFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -38,28 +54,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Movies/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Person/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyc29uXENyZWF0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Person/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyc29uXERlbGV0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Person/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyc29uXEVkaXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Person/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyc29uXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Shared/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/DELL/OneDrive/Desktop/BAITHUCHANH_PTPMQL/DemoMVC/Views/Shared/_ValidationScriptsPartial.cshtml]

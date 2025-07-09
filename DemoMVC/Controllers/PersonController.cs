@@ -7,11 +7,13 @@ namespace MvcMovie.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;   
+        private readonly AutoGenerateCode _autoGenerateCode;
+        public PersonController(ApplicationDbContext context, AutoGenerateCode autoGenerateCode)
 
-        public PersonController(ApplicationDbContext context)
         {
             _context = context;
+            _autoGenerateCode = autoGenerateCode;
         }
 
         public async Task<IActionResult> Index()
@@ -22,6 +24,15 @@ namespace MvcMovie.Controllers
 
         public IActionResult Create()
         {
+            var lastPerson = _context.People // lay ma cuoi cung tron csdl
+            .OrderByDescending (s => s.PersonId)
+            .FirstOrDefault();  
+
+            var PersonId = lastPerson?.PersonId ?? "P000"; 
+
+            var newPersonId = _autoGenerateCode.GenerateCode(PersonId); 
+            ViewBag.newPersonId = newPersonId;
+            
             return View();
         }
 
@@ -53,6 +64,9 @@ namespace MvcMovie.Controllers
 
             return View(person);
         }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("PersonId,FullName,Address")] Person person)
