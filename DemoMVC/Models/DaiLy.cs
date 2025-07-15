@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 namespace DemoMVC.Models
 {
     public class DaiLy
     {
+        [Key]
         public required string MaDaiLy { get; set; }
+        [Required]
         public required string TenDaiLy { get; set; }
         public required string DiaChi { get; set; }
         public required string NguoiDaiDien { get; set; }

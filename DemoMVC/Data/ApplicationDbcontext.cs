@@ -11,5 +11,6 @@ namespace DemoMVC.Data // ✅ Đúng theo tên project
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<DemoMVC.Models.DaiLy> DaiLy { get; set; } = default!;
     }
 }
