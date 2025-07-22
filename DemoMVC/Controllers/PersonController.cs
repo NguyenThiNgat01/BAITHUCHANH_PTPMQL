@@ -1,72 +1,185 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DemoMVC.Models;
 using DemoMVC.Data;
+using DemoMVC.Models;
+using System.Data;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
+using System.IO;
+using DemoMVC.Models.Process;
 
-namespace MvcMovie.Controllers
+namespace DemoMVC.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly ApplicationDbContext _context;   
-        private readonly AutoGenerateCode _autoGenerateCode;
-        public PersonController(ApplicationDbContext context, AutoGenerateCode autoGenerateCode)
+        private readonly ApplicationDbContext _context;
+        private ExcelProcess _excelProcess = new ExcelProcess();
 
+        public PersonController(ApplicationDbContext context)
         {
             _context = context;
-            _autoGenerateCode = autoGenerateCode;
-        }
 
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            if (file != null)
+            {
+                string fileExtension = Path.GetExtension(file.FileName);
+                if (fileExtension != ".xls" && fileExtension != ".xlsx")
+                {
+                    ModelState.AddModelError("", "Please choose excel file to upload!");
+                }
+                else
+                {
+                    var fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + fileExtension;
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", fileName);
+                    var fileLocation = new FileInfo(filePath).ToString();
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    
+                    var dt = _excelProcess.ExcelToDataTable(fileLocation) as DataTable;
+
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            var ps = new Person()
+                            {
+                                PersonId = dt.Rows[i][0]?.ToString() ?? "",
+                                FullName = dt.Rows[i][1].ToString(),
+                                Address = dt.Rows[i][2].ToString()
+                            };
+
+                            _context.Add(ps);
+                        }
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+            }
+
+            return View(); 
+        }
+        public IActionResult Download()
+        
+        {
+           
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; 
+
+            var fileName = "YourFileName" + ".xlsx";
+
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Your Name");
+
+                worksheet.Cells["A1"].Value = "PersonID";
+                worksheet.Cells["B1"].Value = "FullName";
+                worksheet.Cells["C1"].Value = "Address";
+
+                var personList = _context.People.ToList();  
+
+                worksheet.Cells["A2"].LoadFromCollection(personList, false);
+                var stream = new MemoryStream(excelPackage.GetAsByteArray());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
         public async Task<IActionResult> Index()
         {
-            var person = await _context.People.ToListAsync();
-            return View(person);
+            return View(await _context.People.ToListAsync());
         }
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var student = await _context.People
+                .FirstOrDefaultAsync(m => m.PersonId == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return View(student);
+        }
         public IActionResult Create()
         {
-            var lastPerson = _context.People // lay ma cuoi cung tron csdl
-            .OrderByDescending (s => s.PersonId)
-            .FirstOrDefault();  
+            var lastPerson = _context.People
+                .OrderByDescending(p => p.PersonId)
+                .FirstOrDefault();
 
-            var PersonId = lastPerson?.PersonId ?? "P000"; 
-
-            var newPersonId = _autoGenerateCode.GenerateCode(PersonId); 
-            ViewBag.newPersonId = newPersonId;
             
-            return View();
-        }
 
+            string newID = "PS001";
+
+            if (lastPerson != null && !string.IsNullOrEmpty(lastPerson.PersonId))
+            {
+                string lastId = lastPerson.PersonId.Trim();
+
+                // Kiểm tra đúng định dạng PSxxx
+                if (lastId.Length >= 3 && int.TryParse(lastId.Substring(2), out int lastNumber))
+                {
+                    newID = $"PS{(lastNumber + 1).ToString("D3")}";
+                }
+            }
+
+
+            var person = new Person
+            {
+                PersonId = newID,
+                FullName = "",
+                Address = ""
+            };
+
+            return View(person);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PersonId,FullName,Address")] Person person)
         {
-            if (ModelState.IsValid)
+            var lastPerson = _context.People
+               .OrderByDescending(p => p.PersonId)
+               .FirstOrDefault();
+
+
+
+            string newID = "PS001";
+
+            if (lastPerson != null && !string.IsNullOrEmpty(lastPerson.PersonId))
             {
-                _context.Add(person);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                string lastId = lastPerson.PersonId.Trim();
+
+                // Kiểm tra đúng định dạng PSxxx
+                if (lastId.Length >= 3 && int.TryParse(lastId.Substring(2), out int lastNumber))
+                {
+                    newID = $"PS{(lastNumber + 1).ToString("D3")}";
+                }
             }
+            person.PersonId = newID;
+
+            _context.Add(person);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
             return View(person);
         }
-
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.People == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var person = await _context.People.FindAsync(id);
-            if (person == null)
+            var student = await _context.People.FindAsync(id);
+            if (student == null)
             {
                 return NotFound();
             }
-
-            return View(person);
+            return View(student);
         }
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("PersonId,FullName,Address")] Person person)
@@ -85,7 +198,7 @@ namespace MvcMovie.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.PersonId))
+                    if (!StudentExists(person.PersonId))
                     {
                         return NotFound();
                     }
@@ -96,49 +209,41 @@ namespace MvcMovie.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            return View(person);
+        }
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View(person); // Nếu dữ liệu không hợp lệ
+            var student = await _context.People
+                .FirstOrDefaultAsync(m => m.PersonId == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return View(student);
         }
 
-public async Task<IActionResult> Delete(string id)
-{
-    if (id == null || _context.People == null)
-    {
-        return NotFound();
-    }
-
-    var person = await _context.People
-        .FirstOrDefaultAsync(m => m.PersonId == id);
-
-    if (person == null)
-    {
-        return NotFound();
-    }
-
-    return View(person);
-}
-
-
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.People == null)
+            var student = await _context.People.FindAsync(id);
+            if (student != null)
             {
-                return Problem("Entity set 'ApplicationDbContext.People' is null.");
+                _context.People.Remove(student);
             }
 
-            var person = await _context.People.FindAsync(id);
-            if (person != null)
-            {
-                _context.People.Remove(person);
-                await _context.SaveChangesAsync();
-            }
-
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonExists(string id)
+        private bool StudentExists(string id)
         {
             return _context.People.Any(e => e.PersonId == id);
         }

@@ -1,7 +1,7 @@
-using DemoMVC.Models;
 using Microsoft.EntityFrameworkCore;
+using DemoMVC.Models;
 
-namespace DemoMVC.Data // ✅ Đúng theo tên project
+namespace DemoMVC.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -10,7 +10,7 @@ namespace DemoMVC.Data // ✅ Đúng theo tên project
         {
         }
 
-        public DbSet<Person> People { get; set; }
-        public DbSet<DemoMVC.Models.DaiLy> DaiLy { get; set; } = default!;
+        public DbSet<DaiLy> DaiLy { get; set; }    // đã có
+        public DbSet<Person> People { get; set; }  // 👈 thêm dòng này để sửa lỗi PersonController
     }
 }

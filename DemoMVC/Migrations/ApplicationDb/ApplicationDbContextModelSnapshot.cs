@@ -80,7 +80,7 @@ namespace DemoMVC.Migrations.ApplicationDb
 
                     b.HasKey("PersonId");
 
-                    b.ToTable("Persons");
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("DemoMVC.Models.DaiLy", b =>
